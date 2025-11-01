@@ -12,12 +12,11 @@
 - Также отдельно добавить API, которая будет отправлять сообщение на почту(почти тот же функционал, что и через кафку).
 - Написать интеграционные тесты для проверки отправки сообщения на почту.
 
+В этом репозитории распологается notification-service, user-service находится в репозитории: https://github.com/Alexs1051/aston-5-user-service.
+
 ### Результат
-https://github.com/user-attachments/assets/04fd4622-9d49-4f54-aa66-65e512391448
-
-#### Тестовые запросы
-
-
+https://github.com/user-attachments/assets/06816c4c-1ea2-48f4-86b5-1d869b0309d6
 
 #### Тестовое покрытие
-
+<img width="1759" height="316" alt="Screenshot_7" src="https://github.com/user-attachments/assets/0b1e1e71-b845-4c3c-a126-33fa80b52658" />
+<img width="1760" height="315" alt="Screenshot_6" src="https://github.com/user-attachments/assets/b14749ef-9044-4670-9326-137e744e9560" />
