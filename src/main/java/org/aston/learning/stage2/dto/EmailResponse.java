@@ -1,6 +1,10 @@
 package org.aston.learning.stage2.dto;
 
-public class EmailResponse {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+@Relation(collectionRelation = "notifications")
+public class EmailResponse extends RepresentationModel<EmailResponse> {
     private boolean success;
     private String message;
     private String email;

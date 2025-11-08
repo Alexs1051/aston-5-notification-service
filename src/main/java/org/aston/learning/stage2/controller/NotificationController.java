@@ -1,5 +1,7 @@
 package org.aston.learning.stage2.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.aston.learning.stage2.dto.*;
 import org.aston.learning.stage2.service.EmailService;
 import jakarta.validation.Valid;
@@ -10,9 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 @RequestMapping("/api/notifications")
 @Validated
+@Tag(name = "Notification Management", description = "APIs for sending notifications and checking service health")
 public class NotificationController {
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
@@ -21,6 +26,7 @@ public class NotificationController {
     private EmailService emailService;
 
     @PostMapping("/email")
+    @Operation(summary = "Send custom email", description = "Send a custom email to the specified recipient")
     public ResponseEntity<EmailResponse> sendCustomEmail(
             @Valid @RequestBody EmailRequest emailRequest) {
 
@@ -42,6 +48,10 @@ public class NotificationController {
                     emailRequest.getToEmail()
             );
 
+            // HATEOAS links
+            addCommonLinks(response);
+            response.add(linkTo(methodOn(NotificationController.class).sendWelcomeEmail(null)).withRel("send-welcome-email"));
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -53,11 +63,15 @@ public class NotificationController {
                     emailRequest.getToEmail()
             );
 
+            // HATEOAS links
+            addCommonLinks(response);
+
             return ResponseEntity.badRequest().body(response);
         }
     }
 
     @PostMapping("/welcome")
+    @Operation(summary = "Send welcome email", description = "Send a welcome email to a new user")
     public ResponseEntity<EmailResponse> sendWelcomeEmail(
             @Valid @RequestBody WelcomeEmailRequest welcomeRequest) {
 
@@ -77,6 +91,10 @@ public class NotificationController {
                     welcomeRequest.getToEmail()
             );
 
+            // HATEOAS links
+            addCommonLinks(response);
+            response.add(linkTo(methodOn(NotificationController.class).sendCustomEmail(null)).withRel("send-custom-email"));
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -88,18 +106,32 @@ public class NotificationController {
                     welcomeRequest.getToEmail()
             );
 
+            // HATEOAS links
+            addCommonLinks(response);
+
             return ResponseEntity.badRequest().body(response);
         }
     }
 
     @GetMapping("/health")
+    @Operation(summary = "Health check", description = "Check the health status of the notification service")
     public ResponseEntity<HealthResponse> healthCheck() {
         HealthResponse response = new HealthResponse(
                 "Notification Service is running",
                 "OK",
                 System.currentTimeMillis()
         );
+
+        // HATEOAS links
+        response.add(linkTo(methodOn(NotificationController.class).healthCheck()).withSelfRel());
+        response.add(linkTo(methodOn(NotificationController.class).sendCustomEmail(null)).withRel("send-custom-email"));
+        response.add(linkTo(methodOn(NotificationController.class).sendWelcomeEmail(null)).withRel("send-welcome-email"));
+
         return ResponseEntity.ok(response);
+    }
+
+    private void addCommonLinks(EmailResponse response) {
+        response.add(linkTo(methodOn(NotificationController.class).healthCheck()).withRel("health-check"));
     }
 
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)

@@ -1,6 +1,8 @@
 package org.aston.learning.stage2.dto;
 
-public class HealthResponse {
+import org.springframework.hateoas.RepresentationModel;
+
+public class HealthResponse extends RepresentationModel<HealthResponse> {
     private String status;
     private String service;
     private long timestamp;
