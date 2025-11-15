@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -19,6 +20,11 @@ import static org.hamcrest.Matchers.containsString;
 
 @WebMvcTest(NotificationController.class)
 @ActiveProfiles("test")
+@TestPropertySource(properties = {
+        "spring.cloud.config.enabled=false",
+        "spring.config.import=optional:file:.env[.properties]",
+        "eureka.client.enabled=false"
+})
 class NotificationControllerIntegrationTest {
 
     @Autowired

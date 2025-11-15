@@ -1,47 +1,5 @@
 spring:
   application:
     name: notification-service
-
-  mail:
-    host: mailhog
-    port: 1025
-    username: ""
-    password: ""
-    properties:
-      mail:
-        smtp:
-          auth: false
-          starttls:
-            enable: false
-
-  kafka:
-    bootstrap-servers: kafka:9092
-    consumer:
-      group-id: notification-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "*"
-
-server:
-  port: 8081
-
-app:
-  email:
-    from: no-reply@example.com
-    site-url: https://example.com
-
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    operations-sorter: method
-    tags-sorter: alpha
-    display-request-duration: true
-    enabled: true
-
-logging:
-  level:
-    org.springframework.hateoas: DEBUG
+  config:
+    import: "optional:configserver:http://config-server:8888"
